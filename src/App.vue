@@ -1,27 +1,23 @@
 <template>
   <div class="container">
-    <Header 
-      @toggle-add-task="toggleAddTask" 
-      title="Task Tracker"
-      :showAddTask="showAddTask">
+    <Header @toggle-add-task="toggleAddTask" title="Task Tracker" :showAddTask="showAddTask">
     </Header>
     <div v-show="showAddTask">
-      <!-- <AddTask 
+      <AddTask
         :taskToEdit="taskToEdit"
-        :changeTask="changeTask" 
+        :changeTask="changeTask"
         @add-task="addTask"
-        @edit-task="editTask" /> -->
+        @edit-task="editTask"
+      />
     </div>
-    <Tasks 
-      @open-task-editor="openTaskEditor"
-      @delete-task="deleteTask" 
-      :tasks="tasks"></Tasks>
+    <Tasks @open-task-editor="openTaskEditor" @delete-task="deleteTask" :tasks="tasks"></Tasks>
   </div>
 </template>
 
 <script>
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import AddTask from './components/AddTask.vue'
 
 export default {
   name: 'App',
@@ -29,6 +25,7 @@ export default {
   components: {
     Header,
     Tasks,
+    AddTask
   },
 
   data() {
@@ -36,20 +33,19 @@ export default {
       tasks: [],
       showAddTask: false,
       changeTask: false,
-      taskToEdit: {},
+      taskToEdit: {}
     }
   },
 
   methods: {
     async deleteTask(id) {
       const res = await fetch(`http://localhost:5000/tasks/${id}`, {
-        method: "DELETE"
+        method: 'DELETE'
       })
 
       if (res.status === 200) {
         this.tasks = this.tasks.filter((task) => task.id != id)
-      }
-      else {
+      } else {
         alert('Error with deleting the task')
       }
     },
@@ -69,15 +65,15 @@ export default {
       return data
     }
   },
-  
+
   async created() {
     this.tasks = await this.fetchTasks()
 
     function compareSecs(a, b) {
-    return a.secs - b.secs;
+      return a.secs - b.secs
     }
 
-    this.tasks.sort(compareSecs);
+    this.tasks.sort(compareSecs)
   }
 }
 </script>
